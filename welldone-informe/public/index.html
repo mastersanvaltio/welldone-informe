@@ -219,7 +219,7 @@ function header(s,title){
 }
 
 async function buildPPTX(d){
-  const p=new PptxGenJS();
+const p=new pptxgen();
   p.layout='LAYOUT_16x9';
   p.title='Informe Técnico - '+(d.meta?.nombre_proyecto||'Welldone');
   p.author='Welldone Ingeniería & Mantenimiento SAS';
