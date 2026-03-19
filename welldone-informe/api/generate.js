@@ -11,7 +11,7 @@ export default async function handler(req, res) {
 
   try {
     const { pdfText, apiKey, elaboradoPor } = req.body;
-if (!pdfText || !apiKey) return res.status(400).json({ error: "Faltan campos: pdfText, apiKey" });
+    if (!pdfText || !apiKey) return res.status(400).json({ error: "Faltan campos: pdfText, apiKey" });
 
     const systemPrompt = SYSTEM_PROMPT.replace("__ELABORADO_POR__", elaboradoPor || "[DATO PENDIENTE]");
 
@@ -21,16 +21,15 @@ if (!pdfText || !apiKey) return res.status(400).json({ error: "Faltan campos: pd
         "Content-Type": "application/json",
         "x-api-key": apiKey,
         "anthropic-version": "2023-06-01",
-        "anthropic-beta": "pdfs-2024-09-25",
       },
       body: JSON.stringify({
         model: "claude-sonnet-4-20250514",
         max_tokens: 4096,
         system: systemPrompt,
-        messages: [{ role: "user", content: [
-          { type: "document", source: { type: "base64", media_type: "application/pdf", data: pdfBase64 } },
-          { type: "text", text: "Analiza esta propuesta comercial y genera el JSON del informe técnico de cierre." }
-        ]}]
+        messages: [{
+          role: "user",
+          content: `Analiza esta propuesta comercial y genera el JSON del informe técnico de cierre:\n\n${pdfText}`
+        }]
       })
     });
 
