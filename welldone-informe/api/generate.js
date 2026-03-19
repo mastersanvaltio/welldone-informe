@@ -10,8 +10,8 @@ export default async function handler(req, res) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   try {
-    const { pdfBase64, apiKey, elaboradoPor } = req.body;
-    if (!pdfBase64 || !apiKey) return res.status(400).json({ error: "Faltan campos: pdfBase64, apiKey" });
+    const { pdfText, apiKey, elaboradoPor } = req.body;
+if (!pdfText || !apiKey) return res.status(400).json({ error: "Faltan campos: pdfText, apiKey" });
 
     const systemPrompt = SYSTEM_PROMPT.replace("__ELABORADO_POR__", elaboradoPor || "[DATO PENDIENTE]");
 
