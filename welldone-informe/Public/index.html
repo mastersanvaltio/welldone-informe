@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Generador Informe Técnico — Welldone</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+
+:root {
+  --bg:        #1c1a17;
+  --surface:   #252219;
+  --card:      #2e2a22;
+  --card-hi:   #353029;
+  --raised:    #3a342a;
+  --inset:     #1a1814;
+  --border:    rgba(255,255,255,0.07);
+  --border-hi: rgba(255,255,255,0.13);
+  --orange:    #E8400A;
+  --orange-lo: rgba(232,64,10,0.15);
+  --orange-hi: #FF5A22;
+  --text-1:    #f0ece4;
+  --text-2:    #a09880;
+  --text-3:    #6b6050;
+  --green:     #4CAF76;
+  --green-lo:  rgba(76,175,118,0.12);
+  --red:       #E05555;
+  --red-lo:    rgba(224,85,85,0.12);
+  --shadow-up: 4px 4px 10px rgba(0,0,0,0.5), -2px -2px 6px rgba(255,255,255,0.04);
+  --shadow-in: inset 2px 2px 6px rgba(0,0,0,0.6), inset -1px -1px 3px rgba(255,255,255,0.04);
+  --shadow-card: 6px 6px 16px rgba(0,0,0,0.6), -3px -3px 8px rgba(255,255,255,0.04);
+  --r: 10px;
+  --r-sm: 6px;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  background-image: 
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(232,64,10,0.07) 0%, transparent 70%),
+    url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.015'%3E%3Cpath d='M0 0h1v1H0zm20 0h1v1h-1zM0 20h1v1H0zm20 20h1v1h-1z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  min-height: 100vh;
+  color: var(--text-1);
+  padding: 32px 16px 64px;
+}
+
+/* ── HEADER ── */
+.header {
+  width: 100%;
+  max-width: 660px;
+  margin: 0 auto 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.logo {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: var(--text-1);
+  text-transform: uppercase;
+}
+.logo em { color: var(--orange); font-style: normal; }
+.badge {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--orange);
+  border: 1px solid rgba(232,64,10,0.4);
+  background: var(--orange-lo);
+  padding: 4px 10px;
+  border-radius: var(--r-sm);
+}
+
+/* ── CARDS ── */
+.card {
+  width: 100%;
+  max-width: 660px;
+  margin: 0 auto 16px;
+  background: var(--card);
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-card);
+  padding: 24px 28px;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+}
+
+.card-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-title::before {
+  content: '';
+  display: block;
+  width: 3px;
+  height: 14px;
+  background: var(--orange);
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(232,64,10,0.5);
+}
+
+/* ── INPUTS ── */
+.field { margin-bottom: 18px; }
+.field:last-child { margin-bottom: 0; }
+.field-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin-bottom: 8px;
+  display: block;
+}
+.field input {
+  width: 100%;
+  background: var(--inset);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-in);
+  color: var(--text-1);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  padding: 10px 14px;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.field input:focus {
+  border-color: rgba(232,64,10,0.5);
+  box-shadow: var(--shadow-in), 0 0 0 2px rgba(232,64,10,0.12);
+}
+.field input::placeholder { color: var(--text-3); }
+.hint {
+  margin-top: 6px;
+  font-size: 11px;
+  color: var(--text-3);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+.hint::before { content: '🔒'; font-size: 10px; }
+
+/* ── DROP ZONE ── */
+.drop-zone {
+  background: var(--inset);
+  border: 1.5px dashed rgba(255,255,255,0.1);
+  border-radius: var(--r);
+  box-shadow: var(--shadow-in);
+  padding: 40px 24px;
+  text-align: center;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s, background 0.2s;
+}
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: rgba(232,64,10,0.5);
+  background: rgba(232,64,10,0.04);
+}
+.drop-zone.has-file {
+  border-color: rgba(76,175,118,0.4);
+  background: rgba(76,175,118,0.04);
+}
+.drop-zone input[type=file] {
+  position: absolute; inset: 0;
+  opacity: 0; cursor: pointer;
+  width: 100%; height: 100%;
+}
+.drop-icon {
+  width: 52px; height: 52px;
+  margin: 0 auto 14px;
+  background: var(--raised);
+  border-radius: 14px;
+  border: 1px solid var(--border-hi);
+  box-shadow: var(--shadow-up);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  transition: transform 0.2s;
+}
+.drop-zone:hover .drop-icon { transform: translateY(-2px); }
+.drop-zone.has-file .drop-icon { background: var(--green-lo); border-color: rgba(76,175,118,0.3); }
+.drop-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-1);
+  letter-spacing: 0.5px;
+}
+.drop-sub { font-size: 12px; color: var(--text-3); margin-top: 4px; }
+.file-name {
+  margin-top: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--green);
+  display: none;
+  background: var(--green-lo);
+  border-radius: var(--r-sm);
+  padding: 6px 12px;
+  border: 1px solid rgba(76,175,118,0.2);
+  display: none;
+}
+
+/* ── BUTTON ── */
+.btn-generate {
+  width: 100%;
+  max-width: 660px;
+  display: block;
+  margin: 0 auto 16px;
+  padding: 15px 24px;
+  background: var(--orange);
+  background-image: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
+  color: #fff;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: var(--r);
+  box-shadow: 4px 4px 12px rgba(0,0,0,0.5), -2px -2px 6px rgba(255,255,255,0.04), 0 0 20px rgba(232,64,10,0.25);
+  cursor: pointer;
+  transition: all 0.15s;
+  position: relative;
+  overflow: hidden;
+}
+.btn-generate::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: rgba(255,255,255,0.2);
+}
+.btn-generate:hover:not(:disabled) {
+  background: var(--orange-hi);
+  box-shadow: 4px 4px 16px rgba(0,0,0,0.5), -2px -2px 6px rgba(255,255,255,0.05), 0 0 28px rgba(232,64,10,0.4);
+  transform: translateY(-1px);
+}
+.btn-generate:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.5), inset 0 2px 4px rgba(0,0,0,0.3);
+}
+.btn-generate:disabled {
+  background: var(--raised);
+  color: var(--text-3);
+  box-shadow: var(--shadow-up);
+  cursor: not-allowed;
+}
+
+/* ── PROGRESS ── */
+.progress-card { display: none; }
+.bar-wrap {
+  background: var(--inset);
+  border-radius: 4px;
+  height: 6px;
+  box-shadow: var(--shadow-in);
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--orange), var(--orange-hi));
+  border-radius: 4px;
+  width: 0%;
+  transition: width 0.4s ease;
+  box-shadow: 0 0 8px rgba(232,64,10,0.6);
+}
+.bar-label { font-size: 11px; color: var(--text-3); text-align: right; margin-bottom: 20px; }
+
+.step {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.step:last-child { border-bottom: none; }
+.step-icon {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  background: var(--raised);
+  border: 1px solid var(--border-hi);
+  box-shadow: var(--shadow-up);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px;
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 700;
+  color: var(--text-3);
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+.step-icon.active {
+  background: var(--orange-lo);
+  border-color: rgba(232,64,10,0.4);
+  color: var(--orange);
+  box-shadow: 0 0 12px rgba(232,64,10,0.2);
+}
+.step-icon.done {
+  background: var(--green-lo);
+  border-color: rgba(76,175,118,0.4);
+  color: var(--green);
+}
+.step-icon.error {
+  background: var(--red-lo);
+  border-color: rgba(224,85,85,0.4);
+  color: var(--red);
+}
+.step-text { padding-top: 4px; }
+.step-text strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-1);
+  margin-bottom: 2px;
+}
+.step-text span { font-size: 12px; color: var(--text-3); }
+
+/* ── RESULT ── */
+.result-card {
+  display: none;
+  position: relative;
+  overflow: hidden;
+}
+.result-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(232,64,10,0.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.result-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.result-label {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: 4px;
+}
+.result-meta { font-size: 12px; color: var(--text-2); }
+
+.btn-download {
+  padding: 11px 22px;
+  background: var(--raised);
+  border: 1px solid var(--border-hi);
+  border-radius: var(--r-sm);
+  box-shadow: var(--shadow-up);
+  color: var(--text-1);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+.btn-download:hover {
+  background: var(--orange);
+  border-color: var(--orange);
+  box-shadow: 0 0 20px rgba(232,64,10,0.3);
+}
+.btn-download:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-in);
+}
+
+/* ── ERROR ── */
+.error-card {
+  display: none;
+  border-color: rgba(224,85,85,0.3);
+  background: rgba(224,85,85,0.06);
+}
+.error-card .card-title::before { background: var(--red); box-shadow: 0 0 8px rgba(224,85,85,0.5); }
+.error-text { font-size: 13px; color: #f0a0a0; line-height: 1.6; }
+
+/* ── TIP ── */
+.tip {
+  width: 100%;
+  max-width: 660px;
+  margin: 0 auto;
+  background: transparent;
+  border-left: 3px solid rgba(232,64,10,0.3);
+  padding: 10px 16px;
+  font-size: 11px;
+  color: var(--text-3);
+  line-height: 1.7;
+}
+.tip strong { color: var(--text-2); }
+
+/* ── SPINNER ── */
+.spin { display:inline-block; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── DIVIDER ── */
+.divider {
+  width: 100%;
+  max-width: 660px;
+  margin: 8px auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border-hi), transparent);
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Welldone<em>.</em></div>
+  <div class="badge">Informe Técnico</div>
+</div>
+
+<!-- CONFIG -->
+<div class="card">
+  <div class="card-title">Configuración</div>
+  <div class="field">
+    <label class="field-label">API Key de Anthropic</label>
+    <input type="password" id="apiKey" placeholder="sk-ant-api03-..." autocomplete="off">
+    <div class="hint">Se guarda automáticamente en tu navegador</div>
+  </div>
+  <div class="field">
+    <label class="field-label">Elaborado por</label>
+    <input type="text" id="elaboradoPor" placeholder="Nombre del ingeniero" value="Ronald Pedroza Rodriguez">
+  </div>
+</div>
+
+<!-- PDF -->
+<div class="card">
+  <div class="card-title">Propuesta Comercial</div>
+  <div class="drop-zone" id="dropZone">
+    <input type="file" id="pdfInput" accept=".pdf">
+    <div class="drop-icon" id="dropIcon">📄</div>
+    <div class="drop-label" id="dropLabel">Arrastra el PDF de la propuesta</div>
+    <div class="drop-sub" id="dropSub">o haz clic para seleccionar</div>
+    <div class="file-name" id="fileName"></div>
+  </div>
+</div>
+
+<button class="btn-generate" id="btnGenerate" disabled onclick="runGeneration()">
+  Generar Informe Técnico PPT
+</button>
+
+<div class="divider"></div>
+
+<!-- PROGRESS -->
+<div class="card progress-card" id="progressCard">
+  <div class="bar-wrap"><div class="bar" id="progressBar"></div></div>
+  <div class="bar-label" id="progressLabel">0%</div>
+  <div id="steps"></div>
+</div>
+
+<!-- ERROR -->
+<div class="card error-card" id="errorCard">
+  <div class="card-title">Error</div>
+  <div class="error-text" id="errorText"></div>
+</div>
+
+<!-- RESULT -->
+<div class="card result-card" id="resultCard">
+  <div class="result-inner">
+    <div>
+      <div class="result-label">✓ Informe generado</div>
+      <div class="result-meta" id="resultMeta"></div>
+    </div>
+    <button class="btn-download" id="btnDownload">↓ Descargar PPT</button>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="tip">
+  <strong>Flujo:</strong> El texto del PDF se extrae localmente, Claude genera los 8 capítulos y se construye el PPT con identidad Welldone en tamaño carta (8.5" × 11"). Las fotos del cap. 4 se insertan manualmente en PowerPoint.
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script type="module">
+  import pptxgen from 'https://cdn.skypack.dev/pptxgenjs@3.12.0';
+  window._PptxGenJS = pptxgen;
+  window._pptxReady = true;
+  window.dispatchEvent(new Event('pptxReady'));
+</script>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const $ = id => document.getElementById(id);
+let pdfFile = null, pptxBlob = null, PptxGenJS = null;
+
+const savedKey = localStorage.getItem('wd_api_key');
+if (savedKey) $('apiKey').value = savedKey;
+const savedNombre = localStorage.getItem('wd_elaborado_por');
+if (savedNombre) $('elaboradoPor').value = savedNombre;
+
+$('apiKey').addEventListener('change', () => localStorage.setItem('wd_api_key', $('apiKey').value.trim()));
+$('elaboradoPor').addEventListener('change', () => localStorage.setItem('wd_elaborado_por', $('elaboradoPor').value.trim()));
+
+window.addEventListener('pptxReady', () => { PptxGenJS = window._PptxGenJS; });
+
+function checkReady() { $('btnGenerate').disabled = !(pdfFile && $('apiKey').value.trim()); }
+$('apiKey').addEventListener('input', checkReady);
+
+$('pdfInput').addEventListener('change', e => handleFile(e.target.files[0]));
+$('dropZone').addEventListener('dragover', e => { e.preventDefault(); $('dropZone').classList.add('drag-over'); });
+$('dropZone').addEventListener('dragleave', () => $('dropZone').classList.remove('drag-over'));
+$('dropZone').addEventListener('drop', e => { e.preventDefault(); $('dropZone').classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+
+function handleFile(f) {
+  if (!f || f.type !== 'application/pdf') { showError('Solo se aceptan archivos PDF.'); return; }
+  pdfFile = f;
+  $('dropZone').classList.add('has-file');
+  $('dropIcon').textContent = '✅';
+  $('dropLabel').textContent = f.name;
+  $('dropSub').textContent = 'Archivo listo';
+  checkReady();
+}
+
+function showError(msg) {
+  $('errorCard').style.display = 'block';
+  $('errorText').textContent = msg;
+}
+function hideError() { $('errorCard').style.display = 'none'; }
+
+function initSteps() {
+  const defs = [
+    ['Leyendo PDF', 'Extrayendo texto del documento'],
+    ['Analizando propuesta', 'Claude genera los 8 capítulos'],
+    ['Construyendo presentación', 'Generando slides tamaño carta'],
+    ['Preparando descarga', 'Empaquetando archivo .pptx'],
+  ];
+  $('steps').innerHTML = defs.map(([l, s], i) =>
+    `<div class="step">
+      <div class="step-icon" id="si${i}">${i+1}</div>
+      <div class="step-text"><strong>${l}</strong><span>${s}</span></div>
+    </div>`
+  ).join('');
+}
+
+function setStep(i, st) {
+  const ic = $('si'+i); if (!ic) return;
+  ic.className = 'step-icon ' + st;
+  ic.innerHTML = st === 'active' ? '<span class="spin">⟳</span>' : st === 'done' ? '✓' : st === 'error' ? '✕' : i+1;
+}
+function setProgress(p) { $('progressBar').style.width = p+'%'; $('progressLabel').textContent = p+'%'; }
+
+async function extractPdfText(file) {
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({ data: buf }).promise;
+  let txt = '';
+  for (let i = 1; i <= pdf.numPages; i++) {
+    const pg = await pdf.getPage(i);
+    const ct = await pg.getTextContent();
+    txt += ct.items.map(x => x.str).join(' ') + '\n';
+  }
+  return txt.trim();
+}
+
+async function runGeneration() {
+  if (!PptxGenJS) { showError('La librería PPT aún está cargando, espera 2 segundos e intenta de nuevo.'); return; }
+  hideError();
+  $('resultCard').style.display = 'none';
+  $('progressCard').style.display = 'block';
+  $('btnGenerate').disabled = true;
+  initSteps(); setProgress(0);
+
+  try {
+    setStep(0, 'active'); setProgress(10);
+    const pdfText = await extractPdfText(pdfFile);
+    if (!pdfText || pdfText.length < 50) throw new Error('No se pudo extraer texto del PDF. ¿Es un PDF escaneado como imagen?');
+    setStep(0, 'done'); setProgress(25);
+
+    setStep(1, 'active'); setProgress(30);
+    const resp = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        pdfText,
+        apiKey: $('apiKey').value.trim(),
+        elaboradoPor: $('elaboradoPor').value.trim()
+      })
+    });
+    if (!resp.ok) {
+      const e = await resp.json().catch(() => ({}));
+      throw new Error(e.error || `HTTP ${resp.status}`);
+    }
+    const informe = await resp.json();
+    setStep(1, 'done'); setProgress(60);
+
+    setStep(2, 'active'); setProgress(65);
+    pptxBlob = await buildPPTX(informe);
+    setStep(2, 'done'); setProgress(90);
+
+    setStep(3, 'active'); setProgress(100); setStep(3, 'done');
+    const meta = informe.meta || {};
+    $('resultMeta').textContent = `${meta.cliente||'—'} · ${meta.nombre_proyecto||'—'} · ${meta.sector||'—'}`;
+    $('resultCard').style.display = 'block';
+    $('btnDownload').onclick = () => {
+      const url = URL.createObjectURL(pptxBlob);
+      const a = document.createElement('a'); a.href = url;
+      a.download = `IT_Welldone_${(meta.nombre_proyecto||'Informe').replace(/[^a-zA-Z0-9_\-]/g,'_')}.pptx`;
+      a.click(); URL.revokeObjectURL(url);
+    };
+  } catch (err) {
+    showError(err.message || String(err));
+    const st = $('steps').querySelectorAll('.step-icon');
+    for (let i = 0; i < st.length; i++) if (st[i].classList.contains('active')) { setStep(i, 'error'); break; }
+  } finally {
+    $('btnGenerate').disabled = false;
+  }
+}
+
+// ─────────────────────────────────────────────────────────────
+// PPTX BUILDER — tamaño carta 8.5" × 11" (portrait)
+// ─────────────────────────────────────────────────────────────
+const C = { n:'E8400A', go:'2C2C2C', gm:'5A5A5A', w:'FFFFFF', light:'F5F5F3' };
+const F = 'Calibri';
+const PW = 8.5;   // page width inches
+const PH = 11;    // page height inches
+
+function addFooter(s) {
+  s.addShape('rect', { x:0, y:PH-0.45, w:PW, h:0.45, fill:{color:C.go}, line:{color:C.go} });
+  s.addText('W', { x:0.3, y:PH-0.38, w:0.35, h:0.3, fontSize:13, bold:true, color:C.n, fontFace:F });
+  s.addText('WELLDONE INGENIERÍA & MANTENIMIENTO SAS', { x:0.72, y:PH-0.38, w:6, h:0.3, fontSize:7, color:C.w, fontFace:F, charSpacing:1.5 });
+  s.addText('2026', { x:7.5, y:PH-0.38, w:0.7, h:0.3, fontSize:8, color:C.w, fontFace:F, align:'right' });
+}
+
+function addHeader(s, title, num) {
+  s.addShape('rect', { x:0, y:0, w:PW, h:0.75, fill:{color:C.go}, line:{color:C.go} });
+  s.addShape('rect', { x:0, y:0.75, w:PW, h:0.04, fill:{color:C.n}, line:{color:C.n} });
+  s.addText(num ? `${num}.` : '', { x:0.35, y:0.1, w:0.4, h:0.55, fontSize:11, bold:true, color:C.n, fontFace:F, valign:'middle' });
+  s.addText(title, { x: num ? 0.72 : 0.35, y:0.1, w:6.5, h:0.55, fontSize:15, bold:true, color:C.w, fontFace:F, valign:'middle' });
+  s.addText('Welldone', { x:6.9, y:0.15, w:1.3, h:0.45, fontSize:16, bold:true, color:C.n, fontFace:F, align:'right' });
+}
+
+async function buildPPTX(d) {
+  const p = new PptxGenJS();
+
+  // ── TAMAÑO CARTA ──
+  p.defineLayout({ name:'LETTER', width:PW, height:PH });
+  p.layout = 'LETTER';
+
+  p.title   = 'Informe Técnico - ' + (d.meta?.nombre_proyecto || 'Welldone');
+  p.author  = 'Welldone Ingeniería & Mantenimiento SAS';
+  const m = d.meta || {};
+
+  // PORTADA
+  const s0 = p.addSlide();
+  s0.addShape('rect', { x:0, y:0, w:PW, h:PH, fill:{color:C.n}, line:{color:C.n} });
+  s0.addShape('rect', { x:0, y:PH*0.55, w:PW, h:PH*0.45, fill:{color:C.go}, line:{color:C.go} });
+  s0.addShape('rect', { x:0, y:PH*0.55-0.04, w:PW, h:0.04, fill:{color:C.w}, line:{color:C.w} });
+  s0.addText('WELLDONE', { x:0.5, y:1.0, w:7.5, h:2.2, fontSize:72, bold:true, color:C.go, fontFace:F, align:'center' });
+  s0.addText('INGENIERÍA & MANTENIMIENTO SAS', { x:0.5, y:3.0, w:7.5, h:0.5, fontSize:12, bold:false, color:C.go, fontFace:F, align:'center', charSpacing:3 });
+  s0.addShape('rect', { x:2.0, y:3.65, w:4.5, h:0.04, fill:{color:C.go}, line:{color:C.go} });
+  s0.addText('INFORME TÉCNICO DE CIERRE', { x:0.5, y:6.2, w:7.5, h:0.6, fontSize:18, bold:true, color:C.w, fontFace:F, align:'center', charSpacing:2 });
+  s0.addText([
+    {text:(m.cliente||'[CLIENTE]')+'\n',options:{bold:true,breakLine:true}},
+    {text:(m.nombre_proyecto||'[PROYECTO]')+'\n',options:{breakLine:true}},
+    {text:'\n',options:{fontSize:8,breakLine:true}},
+    {text:(m.fecha_ejecucion||'[FECHA]')+'   ·   ID: '+(m.id_informe||'[ID]'),options:{breakLine:true}},
+    {text:'\n',options:{fontSize:8,breakLine:true}},
+    {text:'Elaborado por: '+(m.elaborado_por||'[ELABORADO POR]'),options:{}},
+  ], { x:0.5, y:7.1, w:7.5, h:3.4, fontSize:13, color:C.w, fontFace:F, align:'center', lineSpacingMultiple:1.4 });
+
+  const contentTop = 1.05;
+  const contentH   = PH - contentTop - 0.6;
+
+  // CAP 1 — IDENTIFICACIÓN
+  const s1 = p.addSlide(); addHeader(s1,'Identificación del Proyecto','1'); addFooter(s1);
+  const flds = [['Código','codigo_proyecto'],['Cliente','cliente'],['Proyecto','nombre_proyecto'],['Sector','sector'],['Fecha','fecha_ejecucion'],['Interlocutor','interlocutor']];
+  let yy = contentTop + 0.1;
+  flds.forEach(([lbl,key],i) => {
+    const bg = i%2===0 ? C.light : C.w;
+    s1.addShape('rect',{x:0.35,y:yy,w:7.8,h:0.4,fill:{color:bg},line:{color:'E0E0E0',width:0.5}});
+    s1.addText(lbl+':',{x:0.42,y:yy+0.05,w:1.6,h:0.3,fontSize:10,bold:true,color:C.gm,fontFace:F});
+    s1.addText(m[key]||'—',{x:2.1,y:yy+0.05,w:5.9,h:0.3,fontSize:10,color:C.go,fontFace:F});
+    yy+=0.4;
+  });
+  yy+=0.25;
+  s1.addText('Resumen Ejecutivo',{x:0.35,y:yy,w:7.8,h:0.35,fontSize:12,bold:true,color:C.go,fontFace:F});
+  s1.addShape('rect',{x:0.35,y:yy+0.38,w:0.06,h:contentH-(yy-contentTop)-0.6,fill:{color:C.n},line:{color:C.n}});
+  s1.addText(d.cap1_resumen||'',{x:0.52,y:yy+0.38,w:7.63,h:contentH-(yy-contentTop)-0.6,fontSize:10.5,color:C.gm,fontFace:F,valign:'top',wrap:true,lineSpacingMultiple:1.4});
+
+  // CAP 2 — CONDICIÓN INICIAL
+  const s2 = p.addSlide(); addHeader(s2,'Condición Técnica Inicial','2'); addFooter(s2);
+  s2.addText(d.cap2_condicion_inicial||'',{x:0.35,y:contentTop+0.1,w:7.8,h:3.2,fontSize:10.5,color:C.gm,fontFace:F,valign:'top',wrap:true,lineSpacingMultiple:1.4});
+  const photoGrid2 = [[0,0],[1,0],[0,1],[1,1]];
+  photoGrid2.forEach(([c,r]) => {
+    s2.addShape('rect',{x:0.35+c*3.98,y:contentTop+3.55+r*2.6,w:3.8,h:2.45,fill:{color:'EEEEEE'},line:{color:'DDDDDD',width:0.5}});
+    s2.addText('[ Foto condición inicial ]',{x:0.35+c*3.98,y:contentTop+3.55+r*2.6,w:3.8,h:2.45,fontSize:9,color:'AAAAAA',fontFace:F,align:'center',valign:'middle'});
+  });
+
+  // CAP 3 — ALCANCE
+  const s3 = p.addSlide(); addHeader(s3,'Alcance y Actividades Ejecutadas','3'); addFooter(s3);
+  s3.addText(d.cap3_alcance_intro||'',{x:0.35,y:contentTop+0.1,w:7.8,h:0.85,fontSize:10.5,color:C.gm,fontFace:F,valign:'top',wrap:true});
+  const th3 = [[
+    {text:'Item',options:{bold:true,color:C.w,fill:{color:C.n},align:'center'}},
+    {text:'Descripción',options:{bold:true,color:C.w,fill:{color:C.n}}},
+    {text:'UM',options:{bold:true,color:C.w,fill:{color:C.n},align:'center'}},
+    {text:'Cant.',options:{bold:true,color:C.w,fill:{color:C.n},align:'center'}},
+    {text:'% Ejec.',options:{bold:true,color:C.w,fill:{color:C.n},align:'center'}},
+  ]];
+  const tr3 = (d.cap3_items||[]).map(it => [
+    {text:String(it.item||''),options:{align:'center',color:C.go}},
+    {text:it.descripcion||'',options:{color:C.go}},
+    {text:it.um||'',options:{align:'center',color:C.go}},
+    {text:String(it.cantidad||''),options:{align:'center',color:C.go}},
+    {text:it.ejecucion||'100%',options:{align:'center',color:C.go}},
+  ]);
+  s3.addTable([...th3,...tr3],{x:0.35,y:contentTop+1.05,w:7.8,colW:[0.55,4.7,0.7,0.85,0.85],fontSize:9.5,fontFace:F,border:{pt:0.5,color:'DDDDDD'},rowH:0.42});
+  s3.addText('Todos los ítems contratados fueron ejecutados en su totalidad.',{x:0.35,y:PH-1.1,w:7.8,h:0.35,fontSize:9.5,italic:true,color:C.gm,fontFace:F});
+
+  // CAP 4 — FOTOGRAFICO
+  const s4 = p.addSlide(); addHeader(s4,'Registro Fotográfico','4'); addFooter(s4);
+  for (let r=0;r<3;r++) for (let c=0;c<2;c++) {
+    s4.addShape('rect',{x:0.35+c*4.07,y:contentTop+0.1+r*3.15,w:3.9,h:3.0,fill:{color:'EEEEEE'},line:{color:'DDDDDD',width:0.5}});
+    s4.addText('Foto '+(r*2+c+1),{x:0.35+c*4.07,y:contentTop+0.1+r*3.15,w:3.9,h:3.0,fontSize:10,color:'AAAAAA',fontFace:F,align:'center',valign:'middle'});
+  }
+
+  // CAP 5 — RESULTADOS
+  const s5 = p.addSlide(); addHeader(s5,'Resultados de la Intervención','5'); addFooter(s5);
+  s5.addText(d.cap5_resultados||'',{x:0.35,y:contentTop+0.1,w:7.8,h:2.8,fontSize:10.5,color:C.gm,fontFace:F,valign:'top',wrap:true,lineSpacingMultiple:1.4});
+  s5.addShape('rect',{x:0.35,y:contentTop+3.1,w:7.8,h:0.04,fill:{color:'EEEEEE'},line:{color:'EEEEEE'}});
+  s5.addText('Métricas de ejecución',{x:0.35,y:contentTop+3.25,w:7.8,h:0.38,fontSize:12,bold:true,color:C.go,fontFace:F});
+  const me = d.cap5_metricas||{};
+  const metrics=[['Tiempo de ejecución',me.tiempo_ejecucion],['Valor contratado',me.valor_contratado],['Valor final',me.valor_final],['Desviaciones del plan',me.desviaciones||'Ninguna']];
+  metrics.forEach(([lbl,val],i) => {
+    const x = i<2 ? 0.35 : 4.2;
+    const yb = contentTop+3.75+(i%2)*1.1;
+    s5.addShape('rect',{x,y:yb,w:3.7,h:0.95,fill:{color:C.light},line:{color:'E0E0E0',width:0.5},rectRadius:4});
+    s5.addText(lbl,{x:x+0.15,y:yb+0.1,w:3.4,h:0.3,fontSize:9,color:C.gm,fontFace:F,bold:true});
+    s5.addText(val||'[DATO PENDIENTE]',{x:x+0.15,y:yb+0.42,w:3.4,h:0.42,fontSize:11,color:C.go,fontFace:F,bold:false});
+  });
+
+  // CAP 6 — RECOMENDACIONES
+  const s6 = p.addSlide(); addHeader(s6,'Recomendaciones Técnicas','6'); addFooter(s6);
+  const rec = d.cap6_recomendaciones||{};
+  const niveles=[
+    {label:'Urgente (≤ 30 días)',items:rec.urgente||[],border:'E05555',bg:'FFF5F5'},
+    {label:'Corto plazo (30–90 días)',items:rec.corto_plazo||[],border:'E8400A',bg:'FFF8F5'},
+    {label:'Planificación anual',items:rec.anual||[],border:'4CAF76',bg:'F5FFF8'},
+  ];
+  let yr = contentTop+0.1;
+  niveles.forEach(nv => {
+    const h = Math.max(0.7, 0.38 + nv.items.length*0.36);
+    s6.addShape('rect',{x:0.35,y:yr,w:7.8,h,fill:{color:nv.bg},line:{color:nv.border,width:1}});
+    s6.addShape('rect',{x:0.35,y:yr,w:0.1,h,fill:{color:nv.border},line:{color:nv.border}});
+    s6.addText(nv.label,{x:0.6,y:yr+0.07,w:5,h:0.28,fontSize:10.5,bold:true,color:C.go,fontFace:F});
+    if(nv.items.length>0){
+      const pts=nv.items.map((t,i)=>({text:t,options:{bullet:true,breakLine:i<nv.items.length-1}}));
+      s6.addText(pts,{x:0.6,y:yr+0.37,w:7.4,h:h-0.42,fontSize:9.5,color:C.gm,fontFace:F});
+    }
+    yr+=h+0.12;
+  });
+
+  // CAP 7 — CIERRE
+  const s7 = p.addSlide(); addHeader(s7,'Cierre y Validación','7'); addFooter(s7);
+  s7.addText(d.cap7_cierre||'',{x:0.35,y:contentTop+0.1,w:7.8,h:3.0,fontSize:10.5,color:C.gm,fontFace:F,valign:'top',wrap:true,lineSpacingMultiple:1.4});
+  s7.addText('Fecha del cierre:',{x:0.35,y:contentTop+3.35,w:4,h:0.35,fontSize:11,bold:true,color:C.go,fontFace:F});
+  s7.addShape('rect',{x:0.35,y:contentTop+3.85,w:7.8,h:1.6,fill:{color:C.go},line:{color:C.go}});
+  s7.addText([
+    {text:'Welldone Ingeniería & Mantenimiento SAS\n',options:{bold:true,color:C.n,breakLine:true}},
+    {text:(m.elaborado_por||'[ELABORADO POR]')+'\n',options:{color:C.w,breakLine:true}},
+    {text:'Director de Proyectos',options:{color:'AAAAAA'}},
+  ],{x:0.6,y:contentTop+4.05,w:7.2,h:1.2,fontSize:11,fontFace:F,lineSpacingMultiple:1.5});
+  s7.addShape('rect',{x:3.2,y:contentTop+5.65,w:2.1,h:0.04,fill:{color:'AAAAAA'},line:{color:'AAAAAA'}});
+  s7.addText('Firma y sello',{x:3.2,y:contentTop+5.75,w:2.1,h:0.3,fontSize:9,color:'AAAAAA',fontFace:F,align:'center'});
+
+  // CAP 8 — GARANTÍAS
+  const s8 = p.addSlide(); addHeader(s8,'Garantías y Compromisos Post-Servicio','8'); addFooter(s8);
+  const gh8 = [[
+    {text:'Cobertura',options:{bold:true,color:C.w,fill:{color:C.n},align:'center'}},
+    {text:'Detalle',options:{bold:true,color:C.w,fill:{color:C.n}}},
+    {text:'Vigencia',options:{bold:true,color:C.w,fill:{color:C.n},align:'center'}},
+  ]];
+  const gr8 = (d.cap8_garantias||[]).map(g => [
+    {text:g.cobertura||'',options:{align:'center',color:C.go}},
+    {text:g.detalle||'',options:{color:C.go}},
+    {text:g.tiempo||'',options:{align:'center',color:C.go}},
+  ]);
+  s8.addTable([...gh8,...gr8],{x:0.35,y:contentTop+0.1,w:7.8,colW:[2.0,4.5,1.3],fontSize:9.5,fontFace:F,border:{pt:0.5,color:'DDDDDD'},rowH:0.44});
+  s8.addText('Compromisos post-servicio',{x:0.35,y:contentTop+3.3,w:7.8,h:0.38,fontSize:12,bold:true,color:C.go,fontFace:F});
+  s8.addShape('rect',{x:0.35,y:contentTop+3.72,w:7.8,h:0.03,fill:{color:'EEEEEE'},line:{color:'EEEEEE'}});
+  s8.addText(d.cap8_compromiso||'',{x:0.35,y:contentTop+3.85,w:7.8,h:0.8,fontSize:10,color:C.gm,fontFace:F,wrap:true});
+  const ps8=(d.cap8_post_servicio||[]).map((t,i)=>({text:t,options:{bullet:true,breakLine:i<(d.cap8_post_servicio.length-1)}}));
+  if(ps8.length>0) s8.addText(ps8,{x:0.35,y:contentTop+4.75,w:7.8,h:1.2,fontSize:10,color:C.go,fontFace:F});
+
+  return await p.write({outputType:'blob'});
+}
+</script>
+</body>
+</html>
